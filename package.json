@@ -1,0 +1,13 @@
+{
+  "name": "formion-solana-data",
+  "version": "0.1.0",
+  "description": "Lightweight, key-free TypeScript client for live Solana DEX flow (Raydium, Orca, Meteora, Pumpswap) via GeckoTerminal. Normalised pool rows: volume, liquidity, price change & buy/sell pressure.",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": { "example": "node --experimental-strip-types src/example.ts" },
+  "keywords": ["solana", "dex", "raydium", "orca", "meteora", "pumpswap", "defi", "analytics", "geckoterminal", "formion"],
+  "author": "Nikola — Formion (formion.ai)",
+  "license": "MIT",
+  "homepage": "https://app.formion.ai/scan/solana-dex-flow"
+}

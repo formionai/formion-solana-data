@@ -1,28 +1,76 @@
+<div align="center">
+
+<img src="assets/banner.png" alt="formion-solana-data" width="100%" />
+
 # formion-solana-data
 
-**Key-free TypeScript client for live Solana DEX flow.** Wraps [GeckoTerminal](https://www.geckoterminal.com/)'s public API (no API key required) and returns normalised pool rows — 24h **volume**, **liquidity**, **price change** and **buy/sell pressure** — across Raydium, Orca, Meteora, Pumpswap and more.
+**Live Solana DEX flow in your terminal — no API key.**
 
-Built and open-sourced by **[Formion](https://formion.ai)** — the AI trading terminal that puts every market on one screen. This is the data layer behind our free public **[Solana DEX Flow](https://app.formion.ai/scan/solana-dex-flow)** page.
+[![npm](https://img.shields.io/badge/npx-formion--solana--data-CB3837?logo=npm)](https://www.npmjs.com/package/formion-solana-data)
+[![No API key](https://img.shields.io/badge/API_key-not_required-22c55e)](#)
+[![Node](https://img.shields.io/badge/node-%E2%89%A522-339933?logo=node.js&logoColor=white)](#)
+[![Zero deps](https://img.shields.io/badge/dependencies-0-blue)](#)
+[![License](https://img.shields.io/badge/license-MIT-555)](LICENSE)
+[![Formion](https://img.shields.io/badge/by-Formion-7c3aed)](https://formion.ai)
 
-## Install
+</div>
+
+See where Solana money is moving — 24h **volume**, **liquidity**, **price change** and **buy/sell pressure** across **Raydium, Orca, Meteora & Pumpswap** — in one command. Wraps [GeckoTerminal](https://www.geckoterminal.com/)'s public API (no key, ~30 req/min), zero dependencies, single TypeScript file.
+
+## ⚡ Try it now (no install, no key)
+
+```bash
+npx github:formionai/formion-solana-data
+```
+
+```
+  ◆ FORMION  ·  Solana DEX Flow  ·  🔥 Trending Solana pools
+  2026-06-11 12:24:08 UTC   data: GeckoTerminal (key-free)
+  ────────────────────────────────────────────────────────────────────────────────
+  POOL                DEX                   PRICE      24H VOL         LIQ      24H%   BUY/SELL FLOW
+  ────────────────────────────────────────────────────────────────────────────────
+  SPCX / SOL          meteora-damm…        $12.70     $157.19M      $53.20  +3256k%   ███████░░░ 75%
+  SOL / USDC          raydium-clmm         $65.07      $21.75M      $4.77M    +2.7%   █████░░░░░ 47%
+  KINS / SOL          pumpswap           $0.00962       $4.44M     $291.2K  +121.4%   █████░░░░░ 52%
+  Gaejook / SOL       pumpswap          $0.000106       $3.92M      $28.2K   -35.5%   ██████░░░░ 64%
+  BIBI / SOL          pumpswap         $0.0000588       $3.59M      $19.3K   -81.5%   █████░░░░░ 54%
+  1B / USDC           pumpswap          $0.000582       $3.46M      $85.1K  +913.1%   ███░░░░░░░ 33%
+  pippin / SOL        raydium             $0.0202        $2.42M      $3.20M  -11.6%   ██████░░░░ 58%
+  ────────────────────────────────────────────────────────────────────────────────
+  Full multi-market terminal (CEX + DEX + AI signals) → https://app.formion.ai/scan/solana-dex-flow
+```
+
+The green/red bar is **buy vs sell pressure** (share of 24h transactions). Live, refreshes on demand.
+
+### CLI options
+
+```bash
+npx github:formionai/formion-solana-data raydium          # top Raydium pools
+npx github:formionai/formion-solana-data --sort chg24     # biggest 24h movers
+npx github:formionai/formion-solana-data --watch 10 -n 25 # live, refresh every 10s
+npx github:formionai/formion-solana-data --json | jq '.[0]'   # raw data → jq
+```
+
+| flag | meaning |
+|---|---|
+| `[dex]` | `all` (trending, default) · `raydium` · `orca` · `meteora` · `pumpswap` · `raydium-clmm` · `meteora-damm-v2` |
+| `-n, --limit <n>` | rows to show (default 15) |
+| `-w, --watch <sec>` | refresh every `<sec>` seconds |
+| `--sort <field>` | `vol24` (default) · `liq` · `chg24` · `buyPressure` |
+| `--json` | raw JSON for piping |
+
+## 📦 Use it as a library
 
 ```bash
 npm i formion-solana-data
-# or just copy src/index.ts — it's a single dependency-free file
+# …or just copy src/index.ts — it's one dependency-free file
 ```
-
-Requires a runtime with global `fetch` + `AbortSignal.timeout` (Node 18+, Bun, Deno, modern browsers). Pass your own `fetchImpl` otherwise.
-
-## Usage
 
 ```ts
 import { getSolanaFlow } from "formion-solana-data";
 
-// Trending Solana pools (the live "flow")
-const rows = await getSolanaFlow();
-
-// Top pools for a specific DEX, sorted by 24h volume
-const raydium = await getSolanaFlow("raydium");
+const rows = await getSolanaFlow();           // trending Solana pools
+const raydium = await getSolanaFlow("raydium"); // top Raydium pools by 24h volume
 
 console.log(rows[0]);
 // {
@@ -33,29 +81,34 @@ console.log(rows[0]);
 // }
 ```
 
-### Supported DEX filters
+Runs anywhere with global `fetch` + `AbortSignal.timeout` — Node 18+, Bun, Deno, modern browsers. Pass `{ fetchImpl }` otherwise.
 
-`all` (trending) · `raydium` · `orca` · `meteora` · `pumpswap` · `raydium-clmm` · `meteora-damm-v2`
+### API
 
-```ts
-import { SOLANA_DEXES } from "formion-solana-data";
-```
+**`getSolanaFlow(dex?, opts?) => Promise<SolanaPool[]>`**
+- `dex` — `"all"` (default, trending pools) or a DEX id (top pools by 24h volume)
+- `opts.timeoutMs` — upstream timeout (default `9000`)
+- `opts.fetchImpl` — custom `fetch` (Node <18 / testing)
 
-## API
+**`SolanaPool`** — `pool, poolAddress, dex, base, quote, priceUsd, vol24, vol1h, liq, chg24, chg1h, buys24, sells24, buyers24, sellers24, buyPressure (0–100), fdv, geckoUrl`
 
-### `getSolanaFlow(dex?, opts?) => Promise<SolanaPool[]>`
-- `dex`: `"all"` (default, trending pools) or a DEX id (top pools by 24h volume).
-- `opts.timeoutMs`: upstream timeout (default `9000`).
-- `opts.fetchImpl`: custom `fetch` (Node <18 / testing).
+## 🧠 Build ideas
 
-### `SolanaPool`
-`pool, poolAddress, dex, base, quote, priceUsd, vol24, vol1h, liq, chg24, chg1h, buys24, sells24, buyers24, sellers24, buyPressure (0–100), fdv, geckoUrl`
+- A Telegram/Discord bot that pings when `buyPressure > 70%` on a fresh pool
+- A "new liquidity" watcher across Raydium + Meteora
+- Feed `chg24` + `vol24` into your own momentum screener
+- A live dashboard tile (the data behind Formion's own [Solana DEX Flow](https://app.formion.ai/scan/solana-dex-flow))
 
 ## Rate limits & caching
-GeckoTerminal's free public API allows ~30 requests/minute. For a public-facing site, cache results server-side (Formion caches 60s per DEX). Don't call this from every client.
 
-## Why
-A Solana trader shouldn't need five tabs to see where flow is going. This is a small piece of [Formion](https://formion.ai)'s free Solana intelligence layer — DEX flow today, a token screener and smart-money tracker next. Contributions welcome.
+GeckoTerminal's free API allows ~30 req/min. For anything public-facing, cache server-side (Formion caches 60s per DEX). Don't call it from every browser client.
+
+## Why this exists
+
+A Solana trader shouldn't need five tabs to see where flow is going. This is one small, free piece of **[Formion](https://formion.ai)** — the AI trading terminal that puts every market (CEX + DEX + stocks + AI signals) on one screen. DEX flow today; token screener and smart-money tracker next. PRs welcome.
+
+> **Want the full picture?** Formion turns this raw flow into AI signals, alerts, backtests and one-click automation across every market → **[app.formion.ai](https://app.formion.ai/scan/solana-dex-flow)**
 
 ## License
-MIT © 2026 Formion (formion.ai)
+
+MIT © 2026 [Formion](https://formion.ai)

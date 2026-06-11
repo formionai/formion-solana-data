@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --experimental-strip-types
+#!/usr/bin/env node
 /**
  * formion-solana-data CLI — live Solana DEX flow in your terminal. No API key.
  *

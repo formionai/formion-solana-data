@@ -1,23 +1,37 @@
 {
   "name": "formion-solana-data",
   "version": "0.2.0",
-  "description": "Live Solana DEX flow in your terminal — no API key. Key-free TypeScript client + CLI for Raydium, Orca, Meteora & Pumpswap (volume, liquidity, price change, buy/sell pressure) via GeckoTerminal.",
+  "description": "Live Solana DEX flow in your terminal — no API key. CLI + zero-runtime-dep TypeScript client for Raydium, Orca, Meteora & Pumpswap (volume, liquidity, price change, buy/sell pressure) via GeckoTerminal.",
   "type": "module",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
-    "formion-solana-data": "src/cli.ts"
+    "formion-solana-data": "dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "scripts": {
+    "build": "tsc",
     "flow": "node --experimental-strip-types src/cli.ts",
     "watch": "node --experimental-strip-types src/cli.ts --watch 15",
-    "example": "node --experimental-strip-types src/example.ts"
+    "example": "node --experimental-strip-types src/example.ts",
+    "prepare": "tsc",
+    "prepublishOnly": "tsc"
   },
   "files": [
+    "dist",
     "src"
   ],
   "engines": {
-    "node": ">=22"
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
   },
   "keywords": ["solana", "dex", "raydium", "orca", "meteora", "pumpswap", "defi", "analytics", "cli", "trading", "crypto", "geckoterminal", "formion"],
   "author": "Nikola — Formion (formion.ai)",

@@ -6,7 +6,7 @@
 
 **Live Solana DEX flow in your terminal — no API key.**
 
-[![npm](https://img.shields.io/badge/npx-formion--solana--data-CB3837?logo=npm)](https://www.npmjs.com/package/formion-solana-data)
+[![Try it](https://img.shields.io/badge/npx-run_it_now-CB3837?logo=npm&logoColor=white)](#-try-it-now-no-install-no-key)
 [![No API key](https://img.shields.io/badge/API_key-not_required-22c55e)](#)
 [![Node](https://img.shields.io/badge/node-%E2%89%A522-339933?logo=node.js&logoColor=white)](#)
 [![Zero deps](https://img.shields.io/badge/dependencies-0-blue)](#)
@@ -62,7 +62,7 @@ npx github:formionai/formion-solana-data --json | jq '.[0]'   # raw data → jq
 ## 📦 Use it as a library
 
 ```bash
-npm i formion-solana-data
+npm i github:formionai/formion-solana-data
 # …or just copy src/index.ts — it's one dependency-free file
 ```
 

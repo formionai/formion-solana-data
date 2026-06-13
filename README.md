@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/formionai/formion-solana-data/main/assets/banner.png" alt="formion-solana-data" width="100%" />
+<img src="https://raw.githubusercontent.com/formionai/formion-solana-data/main/assets/banner.png" alt="formion-solana-data" width="60%" />
 
 # formion-solana-data
 
